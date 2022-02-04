@@ -1,12 +1,14 @@
-import React from 'react';
+import { CircularProgress } from '@mui/material';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import './Ceate.css';
 
 
 const Create = () => {
     const { register, handleSubmit, reset } = useForm();
+    const [loading, setLoading] = useState(false);
     const onSubmit = data => {
-        console.log(data);
+        setLoading(true);
         fetch("http://localhost:5000/data", {
             method:"POST",
             headers:{
@@ -16,7 +18,7 @@ const Create = () => {
         })
         .then(res => res.json())
         .then(data =>{
-            console.log(data);
+            setLoading(false);
             reset();
         })
         
@@ -32,6 +34,8 @@ const Create = () => {
                 <input type="text" {...register("book")} placeholder="book name*" required/>
                 <br />
                 <input type="text" {...register("date")} placeholder='published date' required/>
+                <br />
+                {loading && <CircularProgress color="secondary" />}
                 <br />
                 <input type="submit" />
             </form>
